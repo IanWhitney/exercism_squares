@@ -6,23 +6,15 @@ class Squares
   end
 
   def square_of_sums
-    (calculate(0) { |ret, n| ret += n }) ** 2
+    (Calculator.calculate(numbers, 0) { |ret, n| ret += n }) **  2
   end
 
   def sum_of_squares
-    calculate(0) { |ret, n| ret += n ** 2 }
+    (Calculator.calculate(numbers, 0) { |ret, n| ret += n ** 2 })
   end
 
   def difference
     square_of_sums - sum_of_squares
-  end
-
-  private
-
-  def calculate(start, &blk)
-    numbers.inject(start) do |ret, n|
-      blk.call(ret, n)
-    end
   end
 end
 
@@ -35,5 +27,13 @@ class Nums
 
   def each &block
     @members.each{|member| block.call(member)}
+  end
+end
+
+module Calculator
+  def self.calculate(numbers, start, &blk)
+    numbers.inject(start) do |ret, n|
+      blk.call(ret, n)
+    end
   end
 end

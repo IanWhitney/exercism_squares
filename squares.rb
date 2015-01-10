@@ -6,19 +6,23 @@ class Squares
   end
 
   def square_of_sums
-    numbers.inject(0) do |ret, n|
-      ret += n
-    end ** 2
+    (calculate(0) { |ret, n| ret += n }) ** 2
   end
 
   def sum_of_squares
-    numbers.inject(0) do |ret, n|
-      ret += n**2
-    end
+    calculate(0) { |ret, n| ret += n ** 2 }
   end
 
   def difference
     square_of_sums - sum_of_squares
+  end
+
+  private
+
+  def calculate(start, &blk)
+    numbers.inject(start) do |ret, n|
+      blk.call(ret, n)
+    end
   end
 end
 

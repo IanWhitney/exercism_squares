@@ -6,15 +6,21 @@ class Squares
   end
 
   def square_of_sums
-    (Calculator.calculate(numbers, 0) { |ret, n| ret += n }) **  2
+    (calculate { |ret, n| ret += n }) **  2
   end
 
   def sum_of_squares
-    (Calculator.calculate(numbers, 0) { |ret, n| ret += n ** 2 })
+    (calculate { |ret, n| ret += n ** 2 })
   end
 
   def difference
     square_of_sums - sum_of_squares
+  end
+
+  private
+
+  def calculate(&blk)
+    Calculator.calculate(numbers, 0, &blk)
   end
 end
 
@@ -31,9 +37,9 @@ class Nums
 end
 
 module Calculator
-  def self.calculate(numbers, start, &blk)
+  def self.calculate(numbers, start)
     numbers.inject(start) do |ret, n|
-      blk.call(ret, n)
+      yield(ret, n)
     end
   end
 end
